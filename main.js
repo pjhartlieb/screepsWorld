@@ -1,3 +1,12 @@
+//FrontMatter
+/* 
+- wubbernaut (user)
+- screepWorld
+- main.js
+- v0.0.1
+- 12026.07.26
+*/
+
 // Load modules
 // Export role.harvester module and assign to variable
 var roleHarvester = require('role.harvester');

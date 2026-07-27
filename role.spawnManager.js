@@ -1,3 +1,12 @@
+//FrontMatter
+/* 
+- wubbernaut (user)
+- screepWorld
+- role.spawnManager.js
+- v0.0.1
+- 12026.07.26
+*/
+
 // Define queue
 // List of dictionaries
 // Each dictionary contains details for a specific role

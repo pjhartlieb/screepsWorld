@@ -1,5 +1,27 @@
+//FrontMatter
+/* 
+- wubbernaut (user)
+- screepWorld
+- role.harvester.js
+- v0.0.1
+- 12026.07.26
+*/
+
+// LOGIC and FLOW
+/* Check how much energy the creep is carrying
+    If it is not carrying
+        - First check for ruins.
+        - If ruins are found, extract energy
+        - If ruins are not found, find nearest normal energy source
+        - Extract energy
+    If it IS carrying energy
+        - Find the nearest construction site and build
+        - If no construction site are found, find and upgrade the RC
+*/
+
 // Create variable object
 // The variable holds all functions and data for the harvester role
+
 var roleHarvester = {
 
     // Add run property
@@ -7,7 +29,9 @@ var roleHarvester = {
     // The function accepts a creep object passed in from main
     run: function(creep) {
 
-        // Check how much energy the creep is carrying
+
+
+
         if (creep.store.getUsedCapacity(RESOURCE_ENERGY) === 0) {
 
             // Find the nearest reachable ruin that contains energy
