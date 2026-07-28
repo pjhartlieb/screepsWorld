@@ -23,64 +23,65 @@
 
 var roleUpgrader = {
 
-    // Add run property
-    // The value of the run property is a function
-    // The function accepts a creep object passed in from main
-    run: function(creep) {
+  run: function(creep) {
 
-        if (creep.store.getUsedCapacity(RESOURCE_ENERGY) === 0) {
-            // Find the nearest reachable ruin that contains energy
-            // FIND_RUINS may return ruins that are empty or contain other resources
-            // The filter keeps only ruins containing energy
-            var ruin = creep.pos.findClosestByPath(FIND_RUINS, {
-                filter: function(ruin) {
-                    return (
-                        ruin.store.getUsedCapacity(RESOURCE_ENERGY) > 0
-                    );
-                }
-            });
-
-            // If an energy-containing ruin was found, withdraw energy from it
-            if (ruin) {
-
-                // Ruins contain stored energy, so use withdraw instead of harvest
-                // If the ruin is too far away, move toward it
-                if (
-                    creep.withdraw(ruin, RESOURCE_ENERGY) ===
-                    ERR_NOT_IN_RANGE
-                ) {
-                    creep.moveTo(ruin);
-                }
-
-                // This creep has been processed
-                // Return to main so the next creep can be processed
-                return;
-            }
-
-            // No usable ruin was found
-            // Find the nearest normal energy source reachable by pathfinding
-            var source = creep.pos.findClosestByPath(FIND_SOURCES);
-
-            // Attempt to harvest from the source
-            // If the source is too far away, move toward it
-            if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
-                creep.moveTo(source);
-            }
-
-            // This creep has been processed
-            // Return to main so the next creep can be processed
-            return;
-        }
-
-        // The creep is carrying energy
-        // Upgrade the room controller
-        if (
-            creep.upgradeController(creep.room.controller) ===
-            ERR_NOT_IN_RANGE
-        ) {
-            creep.moveTo(creep.room.controller);
-        }
+    // Switch from upgrading to gathering when empty.
+    if (
+      creep.memory.working &&
+      creep.store.getUsedCapacity(RESOURCE_ENERGY) === 0
+    ) {
+      creep.memory.working = false;
     }
+
+    // Switch from gathering to upgrading when full.
+    if (
+      !creep.memory.working &&
+      creep.store.getFreeCapacity(RESOURCE_ENERGY) === 0
+    ) {
+      creep.memory.working = true;
+    }
+
+    // GATHERING
+    if (!creep.memory.working) {
+
+      var ruin = creep.pos.findClosestByPath(FIND_RUINS, {
+        filter: function(ruin) {
+          return (
+            ruin.store.getUsedCapacity(RESOURCE_ENERGY) > 0
+          );
+        }
+      });
+
+      if (ruin) {
+        if (
+          creep.withdraw(ruin, RESOURCE_ENERGY) ===
+          ERR_NOT_IN_RANGE
+        ) {
+          creep.moveTo(ruin);
+        }
+
+        return;
+      }
+
+      var source = creep.pos.findClosestByPath(FIND_SOURCES);
+
+      if (source) {
+        if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
+          creep.moveTo(source);
+        }
+      }
+
+      return;
+    }
+
+    // UPGRADING
+    if (
+      creep.upgradeController(creep.room.controller) ===
+      ERR_NOT_IN_RANGE
+    ) {
+      creep.moveTo(creep.room.controller);
+    }
+  }
 };
 
 module.exports = roleUpgrader;

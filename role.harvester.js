@@ -29,9 +29,6 @@ var roleHarvester = {
     // The function accepts a creep object passed in from main
     run: function(creep) {
 
-
-
-
         if (creep.store.getUsedCapacity(RESOURCE_ENERGY) === 0) {
 
             // Find the nearest reachable ruin that contains energy

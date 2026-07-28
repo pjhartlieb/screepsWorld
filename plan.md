@@ -13,13 +13,15 @@ metadata:
 ---
 
 # Goals
+1. TBD
 
 # Objectives
+1. Gain GCL
+2. Increase CPU
 
 # Tasking
-1. Continuously upgrade room controller
+1. Continuously upgrade room controller. This will be handled by 3 dedicated "Upgrader" creeps.
+2. Build road from spawn > RC
 2. Harvest raw materials
 3. Build Walls
 4. Build Ramparts
-5. Create Upgrade creeps. These are dedicated solely to upgrading the room controller. Maintain a minimum number of 3.
-
