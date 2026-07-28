@@ -3,8 +3,8 @@
 - wubbernaut (user)
 - screepWorld
 - role.spawnManager.js
-- v0.0.1
-- 12026.07.26
+- v0.0.2
+- 2026.07.26
 */
 
 // Define queue
@@ -12,9 +12,15 @@
 // Each dictionary contains details for a specific role
 const spawnQueue = [
     {
-        role: 'harvester',
-        minimum: 10,
+        role: 'builder',
+        minimum: 4,
         priority: 1,
+        body: [WORK, CARRY, MOVE]
+    },
+    {
+        role: 'upgrader',
+        minimum: 3,
+        priority: 2,
         body: [WORK, CARRY, MOVE]
     }
 ];
@@ -39,7 +45,7 @@ function run() {
     );
     
     // Loop of all in-game spawns
-    // If the spawn is already spawning a creep, leave it and go to the next spawn
+    // If the spawn is already spawning a creep, leave and go to the next spawn
     for (const spawn of Object.values(Game.spawns)) {
         if (spawn.spawning) {
             continue;

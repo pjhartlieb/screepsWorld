@@ -8,8 +8,11 @@
 */
 
 // Load modules
-// Export role.harvester module and assign to variable
-var roleHarvester = require('role.harvester');
+// Export role.builder module and assign to variable
+var roleBuilder = require('role.builder');
+
+// Export role.upgrader module and assign to variable
+var roleUpgrader = require('role.upgrader');
 
 // Export role.spawnManager module and assign to variable
 var spawnManager = require('role.spawnManager');
@@ -35,19 +38,22 @@ module.exports.loop = function () {
 
         switch (creep.memory.role) {
             
-            // Call role.harvester for each harvester creep
+            // Call role.builder for each builder creep
             // Break out of switch when done
-            case 'harvester':
-                roleHarvester.run(creep);
+            case 'builder':
+                roleBuilder.run(creep);
                 break;
-
+            
+                // Call role.upgrader for each upgrader creep
+            // Break out of switch when done
+            case 'upgrader':
+                roleUpgrader.run(creep);
+                break;
+            
+                //
             // Future roles
-            // case 'builder':
-            //     roleBuilder.run(creep);
-            //     break;
-            //
-            // case 'upgrader':
-            //     roleUpgrader.run(creep);
+            // case 'invader':
+            //     roleInvader.run(creep);
             //     break;
         }
     }
