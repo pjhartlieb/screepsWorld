@@ -13,15 +13,18 @@ metadata:
 ---
 
 # Goals
-1. TBD
+1. I'm really not sure what the goals are for this project yet, other than to control rooms.
 
 # Objectives
 1. Gain GCL
 2. Increase CPU
 
 # Tasking
-1. Continuously upgrade room controller. This will be handled by 3 dedicated "Upgrader" creeps.
-2. Build road from spawn > RC
-2. Harvest raw materials
-3. Build Walls
-4. Build Ramparts
+1. Verify and build roles for harvester, builder, and upgrader ==DONE==
+2. Update SpanwManager ==DONE==
+3. Update main.js to use new roles ==DONE==
+4. Continuously upgrade room controller ==DONE==
+5. Build road from spawn > RC ==WORKING==
+6. Harvest raw materials
+7. Build Walls
+8. Build Ramparts
