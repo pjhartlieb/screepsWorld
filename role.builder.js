@@ -15,8 +15,9 @@
         - If ruins are not found, find nearest normal energy source
         - Extract energy
     If it IS carrying energy
-        - Find the nearest construction site and build
-        - If no construction site are found, find and upgrade the RC
+        - Priority 1 is refilling spawns and extensions
+        - Priority 2 is building construction sites
+        - Priority 3 is upgrading the RC
 */
 
 // Create variable object
@@ -26,7 +27,10 @@ var roleBuilder = {
 
   run: function(creep) {
 
-    // Switch from working to gathering when empty.
+    // The conditionals below ensure that the creep:
+    // - FILLS entirely before working
+    // - DRAINS entirely before gathering
+    // Switch from working to gathering when empty
     if (
       creep.memory.working &&
       creep.store.getUsedCapacity(RESOURCE_ENERGY) === 0
@@ -122,7 +126,29 @@ var roleBuilder = {
     }
 
     // WORKING PRIORITY 3:
-    // Upgrade when nothing needs energy or construction.
+    // Repair damaged walls.
+    var wall = creep.pos.findClosestByPath(
+      FIND_STRUCTURES,
+      {
+        filter: function(structure) {
+          return (
+            structure.structureType === STRUCTURE_WALL &&
+            structure.hits < structure.hitsMax
+          );
+        }
+      }
+    );
+
+    if (wall) {
+      if (creep.repair(wall) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(wall);
+      }
+
+      return;
+    }
+
+    // WORKING PRIORITY 4:
+    // Upgrade when nothing else needs doing.
     if (
       creep.upgradeController(creep.room.controller) ===
       ERR_NOT_IN_RANGE

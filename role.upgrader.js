@@ -24,7 +24,9 @@
 var roleUpgrader = {
 
   run: function(creep) {
-
+    // The conditionals below ensure that the creep:
+    // - FILLS entirely before working
+    // - DRAINS entirely before gathering
     // Switch from upgrading to gathering when empty.
     if (
       creep.memory.working &&
