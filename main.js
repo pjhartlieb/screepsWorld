@@ -4,12 +4,12 @@
 - screepWorld
 - main.js
 - v0.0.1
-- 12026.07.26
+- 2026.07.26
 */
 
 // Load modules
 
-// Export role.builder module and assign to variable
+// Export role.harvester module and assign to variable
 var roleHarvester = require('role.harvester');
 
 // Export role.builder module and assign to variable
@@ -20,6 +20,9 @@ var roleUpgrader = require('role.upgrader');
 
 // Export role.spawnManager module and assign to variable
 var spawnManager = require('role.spawnManager');
+
+// Export plan.infrastructure module and assign to variable
+var planInfrastructure = require('plan.infrastructure');
 
 // Runs once every game tick
 module.exports.loop = function () {
@@ -32,17 +35,20 @@ module.exports.loop = function () {
         }
     }
 
+    // Plan infrastructure for room E53S19
+    planInfrastructure.run('E53S19');
+
     // Decide if new creeps need to be spawned
-    // Call "run" attribute for the variable spawnManager
-    spawnManager.run();
+    // Call run function for the spawnManager module
+    spawnManager.run('E53S19');
 
     // Run each living creep
     for (var name in Game.creeps) {
         var creep = Game.creeps[name];
 
         switch (creep.memory.role) {
-            
-            // Call role.builder for each builder creep
+
+            // Call role.harvester for each harvester creep
             // Break out of switch when done
             case 'harvester':
                 roleHarvester.run(creep);
@@ -53,14 +59,13 @@ module.exports.loop = function () {
             case 'builder':
                 roleBuilder.run(creep);
                 break;
-            
-                // Call role.upgrader for each upgrader creep
+
+            // Call role.upgrader for each upgrader creep
             // Break out of switch when done
             case 'upgrader':
                 roleUpgrader.run(creep);
                 break;
-            
-                //
+
             // Future roles
             // case 'invader':
             //     roleInvader.run(creep);

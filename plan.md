@@ -28,3 +28,8 @@ metadata:
 6. Harvest raw materials
 7. Build Walls
 8. Build Ramparts
+9. Create module that maintains roads ==DONE==
+  - establish footprint for all current roads
+  - check road age
+  - rebuild roads that are older than X ticks
+

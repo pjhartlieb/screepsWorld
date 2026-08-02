@@ -3,8 +3,8 @@
 - wubbernaut (user)
 - screepWorld
 - role.builder.js
-- v0.0.2
-- 2026.07.26
+- v0.0.3
+- 2026.08.02
 */
 
 // LOGIC and FLOW
@@ -16,12 +16,14 @@
         - Extract energy
     If it IS carrying energy
         - Priority 1 is refilling spawns and extensions
-        - Priority 2 is building construction sites
-        - Priority 3 is upgrading the RC
+        - Priority 2 is repairing damaged baseline infrastructure
+        - Priority 3 is building construction sites
+        - Priority 4 is repairing damaged walls
+        - Priority 5 is upgrading the RC
 */
 
 // Create variable object
-// The variable holds all functions and data for the harvester role
+// The variable holds all functions and data for the builder role
 
 var roleBuilder = {
 
@@ -112,6 +114,63 @@ var roleBuilder = {
     }
 
     // WORKING PRIORITY 2:
+    // Repair damaged infrastructure recorded in the baseline work queue.
+
+    // Check whether infrastructure memory exists
+    // Check whether infrastructure memory exists for the creep's current room
+    var infrastructureRoomMemory =
+      Memory.infrastructure &&
+      Memory.infrastructure.rooms &&
+      Memory.infrastructure.rooms[creep.room.name];
+
+    // Check whether the room has an infrastructure work queue
+    if (
+      infrastructureRoomMemory &&
+      infrastructureRoomMemory.workQueue
+    ) {
+
+      // Find the first repair job in the work queue
+      // find() returns the first matching job
+      // If no repair job exists, it returns undefined
+      var repairJob =
+        infrastructureRoomMemory.workQueue.find(
+          function(job) {
+
+            // Return true when the job action is repair
+            return job.action === 'repair';
+          }
+        );
+
+      // Check whether a repair job was found
+      if (repairJob) {
+
+        // Retrieve the live structure object using the stored structure ID
+        var repairTarget =
+          Game.getObjectById(repairJob.structureId);
+
+        // Check whether the structure still exists
+        if (repairTarget) {
+
+          // Check whether the structure is still below its repair target
+          if (repairTarget.hits < repairJob.targetHits) {
+
+            // Attempt to repair the damaged structure
+            var repairResult =
+              creep.repair(repairTarget);
+
+            // If the structure is outside repair range, move toward it
+            if (repairResult === ERR_NOT_IN_RANGE) {
+              creep.moveTo(repairTarget);
+            }
+
+            // Stop processing lower-priority work this tick
+            return;
+          }
+        }
+      }
+    }
+
+    // WORKING PRIORITY 3:
     // Build construction sites.
     var site = creep.pos.findClosestByPath(
       FIND_CONSTRUCTION_SITES
@@ -125,7 +184,7 @@ var roleBuilder = {
       return;
     }
 
-    // WORKING PRIORITY 3:
+    // WORKING PRIORITY 4:
     // Repair damaged walls.
     var wall = creep.pos.findClosestByPath(
       FIND_STRUCTURES,
@@ -147,7 +206,7 @@ var roleBuilder = {
       return;
     }
 
-    // WORKING PRIORITY 4:
+    // WORKING PRIORITY 5:
     // Upgrade when nothing else needs doing.
     if (
       creep.upgradeController(creep.room.controller) ===
